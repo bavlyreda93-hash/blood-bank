@@ -4,8 +4,14 @@ import customtkinter as ctk
 
 class DispensingPage(ctk.CTkFrame):
 
-    def __init__(self, parent):
-        super().__init__(parent)
+    def __init__(self, parent, backend=None):
+        super().__init__(
+            parent,
+            fg_color="#F4F6F9",
+            corner_radius=0
+        )
+
+        self.backend = backend
 
         self.pack(fill="both", expand=True, padx=30, pady=25)
 
@@ -199,8 +205,10 @@ class DispensingPage(ctk.CTkFrame):
 
             try:
                 quantity = int(quantity)
+
                 if quantity <= 0:
                     return
+
             except ValueError:
                 return
 
@@ -216,6 +224,7 @@ class DispensingPage(ctk.CTkFrame):
             }
 
             self.dispensings.append(new_item)
+
             self.update_table()
             window.destroy()
 

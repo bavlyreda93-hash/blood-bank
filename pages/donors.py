@@ -5,16 +5,15 @@ from tkinter import messagebox
 
 class DonorsPage(ctk.CTkFrame):
 
-    def __init__(self, parent):
+    def __init__(self, parent, backend=None):
         super().__init__(
             parent,
             fg_color="#F4F6F9",
             corner_radius=0
         )
 
-        self.pack(fill="both", expand=True, padx=30, pady=25)
+        self.backend = backend
 
-        # Sample Donors Data
         self.donors = [
             {"id": 1, "name": "Ahmed Ali", "age": 25, "gender": "Male", "blood": "A+", "phone": "01012345678"},
             {"id": 2, "name": "Mohamed Samir", "age": 30, "gender": "Male", "blood": "O+", "phone": "01112345678"},
@@ -22,6 +21,8 @@ class DonorsPage(ctk.CTkFrame):
             {"id": 4, "name": "Youssef Adel", "age": 28, "gender": "Male", "blood": "AB+", "phone": "01512345678"},
             {"id": 5, "name": "Nour Ahmed", "age": 24, "gender": "Female", "blood": "O-", "phone": "01098765432"}
         ]
+
+        self.pack(fill="both", expand=True, padx=30, pady=25)
 
         # Page Header
         header = ctk.CTkFrame(self, fg_color="transparent")

@@ -4,12 +4,14 @@ import customtkinter as ctk
 
 class DashboardPage(ctk.CTkFrame):
 
-    def __init__(self, parent):
+    def __init__(self, parent, backend=None):
         super().__init__(
             parent,
             fg_color="#F4F6F9",
             corner_radius=0
         )
+
+        self.backend = backend
 
         self.pack(fill="both", expand=True, padx=30, pady=25)
 
@@ -107,6 +109,7 @@ class DashboardPage(ctk.CTkFrame):
         ]
 
         for index, header in enumerate(headers):
+
             table.grid_columnconfigure(index, weight=1)
 
             ctk.CTkLabel(

@@ -24,6 +24,9 @@ class BloodBankApp(ctk.CTk):
 
         self.configure(fg_color="#F4F6F9")
 
+        # Backend - Ready for SQL Server
+        self.backend = None
+
         # Main Layout
         self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure(0, weight=1)
@@ -54,22 +57,25 @@ class BloodBankApp(ctk.CTk):
 
         self.logo.pack(pady=(35, 40))
 
-        # Navigation Buttons
-        self.pages = [
-            "Dashboard",
-            "Donors",
-            "Patients",
-            "Donations",
-            "Inventory",
-            "Dispensing",
-            "Reports"
-        ]
+        # Page Classes
+        self.page_classes = {
+            "Dashboard": DashboardPage,
+            "Donors": DonorsPage,
+            "Patients": PatientsPage,
+            "Donations": DonationsPage,
+            "Inventory": InventoryPage,
+            "Dispensing": DispensingPage,
+            "Reports": ReportsPage
+        }
 
-        for page in self.pages:
+        # Sidebar Buttons
+        self.sidebar_buttons = {}
+
+        for page_name in self.page_classes:
 
             button = ctk.CTkButton(
                 self.sidebar,
-                text=page,
+                text=page_name,
                 height=45,
                 corner_radius=8,
                 fg_color="transparent",
@@ -77,7 +83,7 @@ class BloodBankApp(ctk.CTk):
                 text_color="white",
                 anchor="w",
                 font=("Arial", 15),
-                command=lambda p=page: self.show_page(p)
+                command=lambda p=page_name: self.show_page(p)
             )
 
             button.pack(
@@ -85,6 +91,8 @@ class BloodBankApp(ctk.CTk):
                 padx=15,
                 pady=5
             )
+
+            self.sidebar_buttons[page_name] = button
 
         # Main Content Area
         self.content = ctk.CTkFrame(
@@ -121,37 +129,51 @@ class BloodBankApp(ctk.CTk):
 
         self.current_page = None
 
-        # Open Dashboard at startup
+        # Open Dashboard
         self.show_page("Dashboard")
 
     # Page Navigation
     def show_page(self, page_name):
 
+        # Reset Scroll Position
+        self.scroll_area._parent_canvas.yview_moveto(0)
+
+        # Destroy Previous Page
         if self.current_page is not None:
             self.current_page.destroy()
 
-        if page_name == "Dashboard":
-            self.current_page = DashboardPage(self.scroll_area)
+        # Update Active Sidebar Button
+        for name, button in self.sidebar_buttons.items():
 
-        elif page_name == "Donors":
-            self.current_page = DonorsPage(self.scroll_area)
+            if name == page_name:
+                button.configure(
+                    fg_color="#DC2626",
+                    hover_color="#B91C1C",
+                    text_color="white"
+                )
 
-        elif page_name == "Patients":
-            self.current_page = PatientsPage(self.scroll_area)
+            else:
+                button.configure(
+                    fg_color="transparent",
+                    hover_color="#29456F",
+                    text_color="white"
+                )
 
-        elif page_name == "Donations":
-            self.current_page = DonationsPage(self.scroll_area)
+        # Create Selected Page
+        page_class = self.page_classes.get(page_name)
 
-        elif page_name == "Inventory":
-            self.current_page = InventoryPage(self.scroll_area)
+        if page_class is not None:
 
-        elif page_name == "Dispensing":
-            self.current_page = DispensingPage(self.scroll_area)
+            self.current_page = page_class(
+                self.scroll_area,
+                backend=self.backend
+            )
 
-        elif page_name == "Reports":
-            self.current_page = ReportsPage(self.scroll_area)
+        # Ensure Scroll Starts at Top
+        self.scroll_area._parent_canvas.yview_moveto(0)
 
 
 if __name__ == "__main__":
+
     app = BloodBankApp()
     app.mainloop()

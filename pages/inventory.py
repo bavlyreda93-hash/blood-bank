@@ -4,8 +4,14 @@ import customtkinter as ctk
 
 class InventoryPage(ctk.CTkFrame):
 
-    def __init__(self, parent):
-        super().__init__(parent)
+    def __init__(self, parent, backend=None):
+        super().__init__(
+            parent,
+            fg_color="#F4F6F9",
+            corner_radius=0
+        )
+
+        self.backend = backend
 
         self.pack(fill="both", expand=True, padx=30, pady=25)
 
@@ -87,9 +93,11 @@ class InventoryPage(ctk.CTkFrame):
             if item["units"] <= 3:
                 status = "Low Stock"
                 color = "#DC2626"
+
             elif item["units"] <= 7:
                 status = "Medium Stock"
                 color = "#D97706"
+
             else:
                 status = "Available"
                 color = "#16A34A"
@@ -123,4 +131,3 @@ class InventoryPage(ctk.CTkFrame):
                 padx=30,
                 pady=15
             )
-

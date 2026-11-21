@@ -4,8 +4,14 @@ import customtkinter as ctk
 
 class DonationsPage(ctk.CTkFrame):
 
-    def __init__(self, parent):
-        super().__init__(parent)
+    def __init__(self, parent, backend=None):
+        super().__init__(
+            parent,
+            fg_color="#F4F6F9",
+            corner_radius=0
+        )
+
+        self.backend = backend
 
         self.pack(fill="both", expand=True, padx=30, pady=25)
 
@@ -206,8 +212,10 @@ class DonationsPage(ctk.CTkFrame):
 
             try:
                 quantity = int(quantity)
+
                 if quantity <= 0:
                     return
+
             except ValueError:
                 return
 
@@ -223,6 +231,7 @@ class DonationsPage(ctk.CTkFrame):
             }
 
             self.donations.append(new_donation)
+
             self.update_table()
             window.destroy()
 
